@@ -30,7 +30,7 @@ const steps = [
     number: "02",
     title: "Write with AI assistance",
     description:
-      "Draft your chapters in a distraction-free editor. The AI agent helps you outline, expand ideas, refine prose, and maintain consistency across your narrative.",
+      "Draft your chapters in a distraction-free editor. Connect your OpenRouter API key to unlock the AI agent — then choose from hundreds of models to outline, expand ideas, refine prose, and maintain consistency across your narrative.",
     icon: (
       <svg
         width="28"
@@ -102,11 +102,6 @@ function StepCard({
       }`}
       style={{ transitionDelay: `${index * 150}ms` }}
     >
-      {/* Connector line */}
-      {index < steps.length - 1 && (
-        <div className="hidden lg:block absolute top-12 left-full w-full h-px bg-gradient-to-r from-surface-border to-transparent z-0" />
-      )}
-
       <div className="relative bg-surface/30 border border-surface-border rounded-2xl p-8 hover:border-accent/15 transition-all duration-300 h-full">
         {/* Step number */}
         <div className="text-accent/30 font-mono text-5xl font-bold absolute top-6 right-6 select-none">

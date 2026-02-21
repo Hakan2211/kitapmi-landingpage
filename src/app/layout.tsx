@@ -38,6 +38,9 @@ export const metadata: Metadata = {
     description:
       "Like Cursor, but for authors. Write, edit, and publish your book with an intelligent AI agent.",
   },
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

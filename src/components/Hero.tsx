@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 function PlatformIcon({ platform }: { platform: "mac" | "windows" | "linux" }) {
@@ -102,7 +103,7 @@ export default function Hero() {
         </p>
       </div>
 
-      {/* App window mockup */}
+      {/* App window mockup with real screenshot */}
       <div className="animate-fade-in-up animation-delay-500 relative z-10 mt-16 w-full max-w-5xl mx-auto">
         <div className="glow-amber rounded-2xl">
           <div className="window-mockup">
@@ -111,104 +112,17 @@ export default function Hero() {
               <div className="window-dot bg-[#FEBC2E]" />
               <div className="window-dot bg-[#28C840]" />
               <span className="ml-3 text-xs text-muted/50 font-mono">
-                kitapmi &mdash; My Novel Project
+                kitapmi
               </span>
             </div>
-            {/* Placeholder editor UI */}
-            <div className="flex min-h-[400px] sm:min-h-[480px]">
-              {/* Sidebar */}
-              <div className="hidden sm:block w-56 border-r border-surface-border bg-[#111111] p-4">
-                <div className="text-xs text-muted/50 uppercase tracking-widest mb-4">
-                  Chapters
-                </div>
-                {[
-                  "The Beginning",
-                  "First Encounter",
-                  "Rising Tension",
-                  "The Journey",
-                  "Revelation",
-                  "Climax",
-                ].map((ch, i) => (
-                  <div
-                    key={ch}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm mb-1 ${
-                      i === 2
-                        ? "bg-accent/10 text-accent border border-accent/20"
-                        : "text-muted/60 hover:text-muted"
-                    }`}
-                  >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                    </svg>
-                    {ch}
-                  </div>
-                ))}
-              </div>
-              {/* Editor area */}
-              <div className="flex-1 p-6 sm:p-8">
-                <div className="max-w-lg">
-                  <h2 className="text-xl font-semibold text-foreground/80 mb-4">
-                    Chapter 3: Rising Tension
-                  </h2>
-                  <div className="space-y-3 text-sm leading-relaxed text-muted/60">
-                    <p>
-                      The city streets grew quieter as evening settled in. Sarah
-                      pulled her coat tighter, watching the last light fade
-                      behind the old cathedral spires.
-                    </p>
-                    <p>
-                      She had been walking for hours, turning the conversation
-                      over in her mind.{" "}
-                      <span className="bg-accent/15 text-accent/80 px-0.5 rounded">
-                        Every word Marcus had spoken felt like a key turning in a
-                        lock she didn&apos;t know existed.
-                      </span>
-                    </p>
-                    <p className="text-muted/30">
-                      The phone in her pocket buzzed. Once. Twice. She ignored
-                      it, knowing exactly who it was...
-                    </p>
-                  </div>
-                  {/* Cursor blink */}
-                  <div className="mt-1 w-0.5 h-5 bg-accent/60 animate-pulse" />
-                </div>
-              </div>
-              {/* AI Chat panel */}
-              <div className="hidden lg:flex flex-col w-72 border-l border-surface-border bg-[#111111]">
-                <div className="p-4 border-b border-surface-border">
-                  <div className="text-xs text-muted/50 uppercase tracking-widest">
-                    AI Assistant
-                  </div>
-                </div>
-                <div className="flex-1 p-4 space-y-3">
-                  <div className="bg-surface rounded-lg p-3 text-xs text-muted/60">
-                    <span className="text-accent/70 font-medium">
-                      kitapmi
-                    </span>
-                    : The highlighted sentence adds strong tension. Consider
-                    extending the metaphor of &quot;keys and locks&quot; in the next
-                    paragraph to maintain thematic consistency.
-                  </div>
-                  <div className="bg-accent/5 border border-accent/10 rounded-lg p-3 text-xs text-muted/60">
-                    <span className="text-foreground/60 font-medium">You</span>:
-                    Can you suggest how the chapter should end?
-                  </div>
-                </div>
-                <div className="p-4 border-t border-surface-border">
-                  <div className="bg-surface rounded-lg px-3 py-2 text-xs text-muted/30 border border-surface-border">
-                    Ask the AI agent...
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Image
+              src="/screenshot-kitapmi.png"
+              alt="Kitapmi — AI-powered book writing IDE showing the three-panel layout with project sidebar, rich text editor, and AI agent assistant"
+              width={1920}
+              height={1080}
+              priority
+              className="w-full h-auto block"
+            />
           </div>
         </div>
       </div>
