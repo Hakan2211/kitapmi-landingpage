@@ -24,9 +24,13 @@ function PlatformIcon({ platform }: { platform: "mac" | "windows" | "linux" }) {
   );
 }
 
+const GITHUB_RELEASE_BASE =
+  "https://github.com/Hakan2211/bookagent/releases/latest/download";
+
 export default function DownloadCTA() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [openNote, setOpenNote] = useState<string | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -48,20 +52,51 @@ export default function DownloadCTA() {
       label: "macOS",
       detail: "Universal (Apple Silicon + Intel)",
       ext: ".dmg",
+      fileName: "Kitapmi-0.1.0-universal.dmg",
     },
     {
       key: "windows" as const,
       label: "Windows",
       detail: "64-bit (x64)",
       ext: ".exe",
+      fileName: "Kitapmi.Setup.0.1.0.exe",
     },
     {
       key: "linux" as const,
       label: "Linux",
-      detail: "AppImage / .deb (x64)",
+      detail: "AppImage (x64)",
       ext: ".AppImage",
+      fileName: "Kitapmi-0.1.0.AppImage",
     },
   ];
+
+  const installNotes: Record<string, { title: string; steps: string[] }> = {
+    windows: {
+      title: "Windows Installation Note",
+      steps: [
+        "Because this is a free, open-source project, it does not have a paid Microsoft publisher certificate.",
+        'Windows SmartScreen may show a blue warning: "Windows protected your PC."',
+        'Click "More info", then click "Run anyway" to proceed with the installation.',
+      ],
+    },
+    mac: {
+      title: "macOS Installation Note",
+      steps: [
+        "Because this app is not signed with a paid Apple Developer account, macOS Gatekeeper will block it the first time.",
+        "Do not double-click the app. Instead, right-click (or Control-click) the app icon and select \"Open\".",
+        "You will be asked to confirm — after that, it will open normally every time.",
+        "Alternatively: go to System Settings > Privacy & Security, scroll down, and click \"Open Anyway\".",
+      ],
+    },
+    linux: {
+      title: "Linux Installation Note",
+      steps: [
+        "Linux does not require paid certificates.",
+        "After downloading the .AppImage, right-click it, go to Properties, and check \"Allow executing file as program\".",
+        "Alternatively, run in your terminal: chmod +x Kitapmi-0.1.0.AppImage && ./Kitapmi-0.1.0.AppImage",
+      ],
+    },
+  };
 
   return (
     <section id="download" className="py-24 sm:py-32 px-6 relative">
@@ -89,38 +124,104 @@ export default function DownloadCTA() {
         {/* Download cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
           {platforms.map((p) => (
-            <a
-              key={p.key}
-              href="#"
-              className="group flex flex-col items-center gap-3 p-6 rounded-2xl border border-surface-border bg-surface/30 hover:bg-surface/60 hover:border-accent/20 transition-all duration-300"
-            >
-              <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/15 flex items-center justify-center text-accent group-hover:bg-accent/15 transition-colors">
-                <PlatformIcon platform={p.key} />
-              </div>
-              <div>
-                <div className="text-foreground font-semibold text-sm">
-                  {p.label}
+            <div key={p.key} className="flex flex-col">
+              <a
+                href={`${GITHUB_RELEASE_BASE}/${p.fileName}`}
+                className="group flex flex-col items-center gap-3 p-6 rounded-2xl border border-surface-border bg-surface/30 hover:bg-surface/60 hover:border-accent/20 transition-all duration-300"
+              >
+                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/15 flex items-center justify-center text-accent group-hover:bg-accent/15 transition-colors">
+                  <PlatformIcon platform={p.key} />
                 </div>
-                <div className="text-muted text-xs mt-0.5">{p.detail}</div>
-              </div>
-              <div className="inline-flex items-center gap-1.5 text-accent text-xs font-medium mt-1">
-                Download {p.ext}
+                <div>
+                  <div className="text-foreground font-semibold text-sm">
+                    {p.label}
+                  </div>
+                  <div className="text-muted text-xs mt-0.5">{p.detail}</div>
+                </div>
+                <div className="inline-flex items-center gap-1.5 text-accent text-xs font-medium mt-1">
+                  Download {p.ext}
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                </div>
+              </a>
+              {/* Installation note toggle */}
+              <button
+                onClick={() =>
+                  setOpenNote(openNote === p.key ? null : p.key)
+                }
+                className="mt-2 text-xs text-muted/60 hover:text-accent transition-colors cursor-pointer flex items-center justify-center gap-1"
+              >
                 <svg
                   width="12"
                   height="12"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2.5"
+                  strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
+                Installation note
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className={`transition-transform duration-200 ${
+                    openNote === p.key ? "rotate-180" : ""
+                  }`}
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              {/* Expandable install instructions */}
+              <div
+                className={`overflow-hidden transition-all duration-300 ${
+                  openNote === p.key
+                    ? "max-h-64 opacity-100 mt-2"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="p-4 rounded-xl border border-surface-border bg-surface/50 text-left">
+                  <h4 className="text-xs font-semibold text-accent mb-2">
+                    {installNotes[p.key].title}
+                  </h4>
+                  <ol className="space-y-1.5">
+                    {installNotes[p.key].steps.map((step, i) => (
+                      <li
+                        key={i}
+                        className="text-xs text-muted/80 leading-relaxed flex gap-2"
+                      >
+                        <span className="text-accent/60 font-mono shrink-0">
+                          {i + 1}.
+                        </span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
               </div>
-            </a>
+            </div>
           ))}
         </div>
 
@@ -172,6 +273,28 @@ export default function DownloadCTA() {
               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
             </svg>
             Open Source
+          </a>
+          <span className="text-muted/30">|</span>
+          <a
+            href="https://github.com/Hakan2211/bookagent#getting-started"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            Build from Source
           </a>
         </div>
       </div>
